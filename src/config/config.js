@@ -1,7 +1,13 @@
 import convict from 'convict';
 
 const config = convict({
-    database: {
+    env: {
+        doc: 'Application environment',
+        format: ['production', 'development', 'test'],
+        default: 'development',
+        env: 'NODE_ENV'
+    },
+    db: {
         host: {
             doc: 'Database host name/IP',
             format: 'String',
@@ -21,11 +27,17 @@ const config = convict({
             env: 'DATABASE_PASSWORD',
             sensitive: true
         },
-        db: {
+        name: {
             doc: 'Database name',
             format: 'String',
             default: 'mydatabase',
             env: 'DATABASE_NAME'
+        },
+        port: {
+            doc: 'Database port',
+            format: 'port',
+            default: 5432,
+            env: 'DATABASE_PORT'
         }
     }
 });
