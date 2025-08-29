@@ -8,6 +8,7 @@ import RuleModel from './infrastructure/database/models/rule.js';
 import RuleTransfomer from './interfaces/http/transformers/rule-transformer.js';
 import { errorHandler } from './interfaces/http/handlers/error-handler.js';
 import logger from './utils/logger.js'
+import TransactionMatcher from './application/services/transaction-matcher.js';
 
 const container = createContainer();
 
@@ -21,6 +22,7 @@ container.register({
 container.register({
     RuleModel: asValue(RuleModel),
     RuleTransfomer: asClass(RuleTransfomer).singleton(),
+    TransactionMatcher: asClass(TransactionMatcher).singleton(),
 });
 
 container.register({

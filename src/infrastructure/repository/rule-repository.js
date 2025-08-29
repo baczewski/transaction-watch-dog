@@ -6,6 +6,11 @@ class RuleRepository {
         this.RuleTransfomer = RuleTransfomer;
     }
 
+    async getAll() {
+        const rules = await this.RuleModel.findAll();
+        return rules.map(rule => this.RuleTransfomer.toDomain(rule));
+    }
+
     // TODO: Add better validation and error handling
     async create(ruleData) {
         try {
