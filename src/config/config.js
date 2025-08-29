@@ -7,6 +7,12 @@ const config = convict({
         default: 'development',
         env: 'NODE_ENV'
     },
+    port: {
+        doc: 'Application port',
+        format: 'port',
+        default: 3000,
+        env: 'PORT'
+    },
     db: {
         host: {
             doc: 'Database host name/IP',
