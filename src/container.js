@@ -9,7 +9,7 @@ import RuleTransfomer from './interfaces/http/transformers/rule-transformer.js';
 import { errorHandler } from './interfaces/http/handlers/error-handler.js';
 import logger from './utils/logger.js'
 import TransactionMatcher from './application/services/transaction-matcher.js';
-import { GetRulesEvent, CreateRuleEvent, GetRuleEvent, DeactivateRuleEvent } from './application/rule/index.js';
+import { GetRulesEvent, CreateRuleEvent, GetRuleEvent, DeactivateRuleEvent, UpdateRuleEvent } from './application/rule/index.js';
 
 const container = createContainer();
 
@@ -40,6 +40,7 @@ container.register({
     getRules: asClass(GetRulesEvent),
     getRule: asClass(GetRuleEvent),
     deactivateRule: asClass(DeactivateRuleEvent),
+    updateRule: asClass(UpdateRuleEvent),
 });
 
 export default container;

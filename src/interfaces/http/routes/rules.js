@@ -8,6 +8,7 @@ const api = makeClassInvoker(RulesController);
 
 router.post('/', api('create'));
 router.get('/', api('getAll'));
+router.patch('/:id', api('update'));
 router.post('/:id/deactivate', api('deactivate'));
 router.get('/:id', api('getById'));
 

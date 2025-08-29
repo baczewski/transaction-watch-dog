@@ -1,11 +1,12 @@
 import { StatusCodes } from 'http-status-codes';
 
 class RulesController {
-    constructor({ createRule, getRules, getRule, deactivateRule }) {
+    constructor({ createRule, getRules, getRule, deactivateRule, updateRule }) {
         this.createRule = createRule;
         this.getRules = getRules;
         this.getRule = getRule;
         this.deactivateRule = deactivateRule;
+        this.updateRule = updateRule;
     }
 
     create(req, res, next) {
@@ -80,6 +81,31 @@ class RulesController {
             });
 
         deactivateRule.execute(id);
+    }
+
+    update(req, res, next) {
+        const { updateRule } = this;
+        const { SUCCESS, VALIDATION_ERROR, NOT_FOUND, ERROR } = updateRule.events;
+        const { id } = req.params;
+
+        updateRule
+            .on(SUCCESS, (rule) => {
+                res.status(StatusCodes.OK).json(rule);
+            })
+            .on(VALIDATION_ERROR, (error) => {
+                res.status(StatusCodes.BAD_REQUEST).json({
+                    type: 'validation_error',
+                    details: error,
+                });
+            })
+            .on(NOT_FOUND, (message) => {
+                res.status(StatusCodes.NOT_FOUND).json({ message });
+            })
+            .on(ERROR, (error) => {
+                next(error);
+            });
+
+        updateRule.execute(id, req.body);
     }
 }
 

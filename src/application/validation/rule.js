@@ -41,7 +41,7 @@ export const createRuleSchema = yup.object({
         .optional()
 });
 
-const updateRuleSchema = yup.object({
+export const updateRuleSchema = yup.object({
     name: yup.string()
         .min(1, 'Name must not be empty')
         .max(255, 'Name must be less than 255 characters')
@@ -50,9 +50,6 @@ const updateRuleSchema = yup.object({
     version: yup.number()
         .integer('Version must be an integer')
         .min(1, 'Version must be at least 1')
-        .optional(),
-    
-    isActive: yup.boolean()
         .optional(),
     
     blockConfirmationDelay: yup.number()

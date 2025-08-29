@@ -8,6 +8,7 @@ const RuleHead = sequelize.define('RuleHead', {
         allowNull: false,
         defaultValue: DataTypes.UUIDV4,
     },
+    // Do I need name, or can I get it from the current rule?
     name: {
         type: DataTypes.STRING,
         allowNull: false,
