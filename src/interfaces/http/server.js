@@ -1,10 +1,12 @@
 import express from 'express';
 
 class Server {
-    constructor({ router }) {
+    constructor({ router, errorHandler }) {
         this.express = express();
         this.setupMiddleware();
         this.express.use(router);
+        
+        this.express.use(errorHandler);
     }
 
     setupMiddleware() {
