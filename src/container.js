@@ -1,6 +1,4 @@
 import { asClass, asFunction, asValue, createContainer } from 'awilix';
-import CreateRuleEvent from './application/rule/create-rule-event.js';
-import GetRulesEvent from './application/rule/get-rules-event.js';
 import RuleRepository from './infrastructure/repository/rule-repository.js';
 import Server from './interfaces/http/server.js';
 import { scopePerRequest } from 'awilix-express';
@@ -10,6 +8,7 @@ import RuleTransfomer from './interfaces/http/transformers/rule-transformer.js';
 import { errorHandler } from './interfaces/http/handlers/error-handler.js';
 import logger from './utils/logger.js'
 import TransactionMatcher from './application/services/transaction-matcher.js';
+import { GetRulesEvent, CreateRuleEvent } from './application/rule/index.js';
 
 const container = createContainer();
 
