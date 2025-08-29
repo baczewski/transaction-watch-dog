@@ -4,6 +4,7 @@ import RuleRepository from './infrastructure/repository/rule-repository.js';
 import Server from './interfaces/http/server.js';
 import { scopePerRequest } from 'awilix-express';
 import createRouter from './interfaces/http/router.js';
+import RuleModel from './infrastructure/database/models/rule.js';
 
 const container = createContainer();
 
@@ -11,6 +12,10 @@ container.register({
     server: asClass(Server).singleton(),
     router: asFunction(createRouter).singleton(),
 })
+
+container.register({
+    RuleModel: asValue(RuleModel)
+});
 
 container.register({
     containerMiddleware: asValue(scopePerRequest(container)),

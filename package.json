@@ -14,7 +14,8 @@
     "eslint-plugin-prettier": "^5.5.4",
     "globals": "^16.3.0",
     "nodemon": "^3.1.10",
-    "prettier": "^3.6.2"
+    "prettier": "^3.6.2",
+    "sequelize-cli": "^6.6.3"
   },
   "dependencies": {
     "awilix": "^12.0.5",
