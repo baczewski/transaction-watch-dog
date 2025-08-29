@@ -20,11 +20,6 @@ const Rule = sequelize.define('Rule', {
             min: 1
         }
     },
-    isActive: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: true,
-    },
     blockConfirmationDelay: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -68,7 +63,8 @@ const Rule = sequelize.define('Rule', {
     underscored: true,
     indexes: [
         {
-            fields: ['is_active']
+            fields: ['name', 'version'],
+            unique: true
         }
     ]
 });
