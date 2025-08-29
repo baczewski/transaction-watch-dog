@@ -5,6 +5,7 @@ import Server from './interfaces/http/server.js';
 import { scopePerRequest } from 'awilix-express';
 import createRouter from './interfaces/http/router.js';
 import RuleModel from './infrastructure/database/models/rule.js';
+import RuleTransfomer from './interfaces/http/transformers/rule-transformer.js';
 import { errorHandler } from './interfaces/http/handlers/error-handler.js';
 import logger from './utils/logger.js'
 
@@ -18,7 +19,8 @@ container.register({
 })
 
 container.register({
-    RuleModel: asValue(RuleModel)
+    RuleModel: asValue(RuleModel),
+    RuleTransfomer: asClass(RuleTransfomer).singleton(),
 });
 
 container.register({

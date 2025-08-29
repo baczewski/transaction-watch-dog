@@ -1,8 +1,9 @@
 import { createRuleSchema } from '../../application/validation/rule.js';
 
 class RuleRepository {
-    constructor({ RuleModel }) {
+    constructor({ RuleModel, RuleTransfomer }) {
         this.RuleModel = RuleModel;
+        this.RuleTransfomer = RuleTransfomer;
     }
 
     // TODO: Add better validation and error handling
@@ -12,9 +13,8 @@ class RuleRepository {
                 abortEarly: false,
                 stripUnknown: true
             });
-
-            const rule = await this.RuleModel.create(validatedData);
-            return rule;
+            const rule = await this.RuleModel.create(this.RuleTransfomer.toPersistence(validatedData));
+            return this.RuleTransfomer.toDomain(rule);
         } catch (error) {
             if (error.name === 'ValidationError') {
                 const validationErrors = error.inner.map(err => ({
