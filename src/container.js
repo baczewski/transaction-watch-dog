@@ -8,7 +8,7 @@ import RuleTransfomer from './interfaces/http/transformers/rule-transformer.js';
 import { errorHandler } from './interfaces/http/handlers/error-handler.js';
 import logger from './utils/logger.js'
 import TransactionMatcher from './application/services/transaction-matcher.js';
-import { GetRulesEvent, CreateRuleEvent } from './application/rule/index.js';
+import { GetRulesEvent, CreateRuleEvent, GetRuleEvent } from './application/rule/index.js';
 
 const container = createContainer();
 
@@ -36,6 +36,7 @@ container.register({
 container.register({
     createRule: asClass(CreateRuleEvent),
     getRules: asClass(GetRulesEvent),
+    getRule: asClass(GetRuleEvent),
 });
 
 export default container;

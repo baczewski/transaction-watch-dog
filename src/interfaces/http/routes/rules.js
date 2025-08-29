@@ -8,5 +8,6 @@ const api = makeClassInvoker(RulesController);
 
 router.post('/', api('create'));
 router.get('/', api('getAll'));
+router.get('/:id', api('getById'));
 
 export default router;

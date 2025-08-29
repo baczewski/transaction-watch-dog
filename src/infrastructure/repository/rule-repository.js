@@ -11,6 +11,11 @@ class RuleRepository {
         return rules.map(rule => this.RuleTransfomer.toDomain(rule));
     }
 
+    async getById(id) {
+        const rule = await this.RuleModel.findByPk(id);
+        return rule ? this.RuleTransfomer.toDomain(rule) : null;
+    }
+
     // TODO: Add better validation and error handling
     async create(ruleData) {
         try {

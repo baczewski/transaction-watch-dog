@@ -1,9 +1,10 @@
 import { StatusCodes } from 'http-status-codes';
 
 class RulesController {
-    constructor({ createRule, getRules }) {
+    constructor({ createRule, getRules, getRule }) {
         this.createRule = createRule;
         this.getRules = getRules;
+        this.getRule = getRule;
     }
 
     create(req, res, next) {
@@ -40,6 +41,25 @@ class RulesController {
             });
 
         getRules.execute();
+    }
+
+    getById(req, res, next) {
+        const { getRule } = this;
+        const { SUCCESS, NOT_FOUND, ERROR } = getRule.events;
+        const { id } = req.params;
+
+        getRule
+            .on(SUCCESS, (rule) => {
+                res.status(StatusCodes.OK).json(rule);
+            })
+            .on(NOT_FOUND, (message) => {
+                res.status(StatusCodes.NOT_FOUND).json({ message });
+            })
+            .on(ERROR, (error) => {
+                next(error);
+            });
+
+        getRule.execute(id);
     }
 }
 

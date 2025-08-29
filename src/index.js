@@ -16,14 +16,14 @@ try {
     process.exit(1);
 }
 
-const matcher = container.resolve('TransactionMatcher');
-const matchingRule = await matcher.matchTransaction({ id: 1, value: '100000000000000000000', description: 'Test transaction' });
-console.log(matchingRule);
+// const matcher = container.resolve('TransactionMatcher');
+// const matchingRule = await matcher.matchTransaction({ id: 1, value: '100000000000000000000', description: 'Test transaction' });
+// console.log(matchingRule);
 
-// const server = container.resolve('server');
-// server.start(config.get('port'));
+config.validate({ allowed: 'strict' });
 
-// config.validate({ allowed: 'strict' });
+const server = container.resolve('server');
+server.start(config.get('port'));
 
 // logger.info('Hello World!');
 // logger.info(JSON.stringify(config.get('db')));
