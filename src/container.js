@@ -4,11 +4,12 @@ import Server from './interfaces/http/server.js';
 import { scopePerRequest } from 'awilix-express';
 import createRouter from './interfaces/http/router.js';
 import RuleModel from './infrastructure/database/models/rule.js';
+import RuleHeadModel from './infrastructure/database/models/rule-heads.js';
 import RuleTransfomer from './interfaces/http/transformers/rule-transformer.js';
 import { errorHandler } from './interfaces/http/handlers/error-handler.js';
 import logger from './utils/logger.js'
 import TransactionMatcher from './application/services/transaction-matcher.js';
-import { GetRulesEvent, CreateRuleEvent, GetRuleEvent } from './application/rule/index.js';
+import { GetRulesEvent, CreateRuleEvent, GetRuleEvent, DeactivateRuleEvent } from './application/rule/index.js';
 
 const container = createContainer();
 
@@ -21,6 +22,7 @@ container.register({
 
 container.register({
     RuleModel: asValue(RuleModel),
+    RuleHeadModel: asValue(RuleHeadModel),
     RuleTransfomer: asClass(RuleTransfomer).singleton(),
     TransactionMatcher: asClass(TransactionMatcher).singleton(),
 });
@@ -37,6 +39,7 @@ container.register({
     createRule: asClass(CreateRuleEvent),
     getRules: asClass(GetRulesEvent),
     getRule: asClass(GetRuleEvent),
+    deactivateRule: asClass(DeactivateRuleEvent),
 });
 
 export default container;

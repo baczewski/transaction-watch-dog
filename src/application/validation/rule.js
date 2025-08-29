@@ -40,3 +40,44 @@ export const createRuleSchema = yup.object({
         .max(500, 'Change reason too long')
         .optional()
 });
+
+const updateRuleSchema = yup.object({
+    name: yup.string()
+        .min(1, 'Name must not be empty')
+        .max(255, 'Name must be less than 255 characters')
+        .optional(),
+    
+    version: yup.number()
+        .integer('Version must be an integer')
+        .min(1, 'Version must be at least 1')
+        .optional(),
+    
+    isActive: yup.boolean()
+        .optional(),
+    
+    blockConfirmationDelay: yup.number()
+        .integer('Block confirmation delay must be an integer')
+        .min(0, 'Block confirmation delay must be at least 0')
+        .max(20, 'Block confirmation delay must be at most 20')
+        .optional(),
+    
+    conditions: yup.array()
+        .of(conditionSchema)
+        .min(1, 'At least one condition is required')
+        .optional(),
+    
+    metadata: yup.object()
+        .optional()
+}).test(
+    'at-least-one-field',
+    'At least one field must be provided for update',
+    function(value) {
+        const { name, version, isActive, blockConfirmationDelay, conditions, metadata } = value;
+        return name !== undefined || 
+               version !== undefined || 
+               isActive !== undefined || 
+               blockConfirmationDelay !== undefined || 
+               conditions !== undefined || 
+               metadata !== undefined;
+    }
+);
