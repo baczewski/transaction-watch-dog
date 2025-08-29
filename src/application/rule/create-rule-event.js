@@ -18,6 +18,10 @@ class CreateRuleEvent extends BaseEvent {
             const newRule = await this.ruleRepository.create(ruleData);
             this.emit(SUCCESS, newRule);
         } catch (error) {
+            if (error.message.startsWith('Validation failed:')) {
+                this.emit(VALIDATION_ERROR, error.message);
+                return;
+            }
             this.emit(ERROR, error);
         }
     }

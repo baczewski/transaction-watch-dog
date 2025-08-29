@@ -14,7 +14,10 @@ class RulesController {
                 res.status(StatusCodes.CREATED).json(rule);
             })
             .on(VALIDATION_ERROR, (error) => {
-                res.status(StatusCodes.BAD_REQUEST).json({ error: error.message });
+                res.status(StatusCodes.BAD_REQUEST).json({
+                    type: 'validation_error',
+                    details: error,
+                });
             })
             .on(ERROR, (error) => {
                 next(error);
