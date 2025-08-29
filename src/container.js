@@ -1,5 +1,6 @@
 import { asClass, asFunction, asValue, createContainer } from 'awilix';
 import CreateRuleEvent from './application/rule/create-rule-event.js';
+import GetRulesEvent from './application/rule/get-rules-event.js';
 import RuleRepository from './infrastructure/repository/rule-repository.js';
 import Server from './interfaces/http/server.js';
 import { scopePerRequest } from 'awilix-express';
@@ -35,6 +36,7 @@ container.register({
 
 container.register({
     createRule: asClass(CreateRuleEvent),
+    getRules: asClass(GetRulesEvent),
 });
 
 export default container;

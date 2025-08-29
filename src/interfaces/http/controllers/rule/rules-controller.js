@@ -1,8 +1,9 @@
 import { StatusCodes } from 'http-status-codes';
 
 class RulesController {
-    constructor({ createRule }) {
+    constructor({ createRule, getRules }) {
         this.createRule = createRule;
+        this.getRules = getRules;
     }
 
     create(req, res, next) {
@@ -24,7 +25,22 @@ class RulesController {
             });
 
         createRule.execute(req.body);
-    } 
+    }
+
+    getAll(req, res, next) {
+        const { getRules } = this;
+        const { SUCCESS, ERROR } = getRules.events;
+
+        getRules
+            .on(SUCCESS, (rules) => {
+                res.status(StatusCodes.OK).json(rules);
+            })
+            .on(ERROR, (error) => {
+                next(error);
+            });
+
+        getRules.execute();
+    }
 }
 
 export default RulesController;
