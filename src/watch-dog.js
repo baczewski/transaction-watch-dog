@@ -16,8 +16,8 @@ class WatchDog {
     registerTransactionMatchEvents() {
         const { SUCCESS, ERROR } = this.transactionMatch.events;
 
-        this.transactionMatch.on(SUCCESS, ({ transaction, rule }) => {
-            this.logger.info(`Transaction ${transaction.hash} matched rule ${rule.id} successfully`);
+        this.transactionMatch.on(SUCCESS, (transaction) => {
+            this.logger.info(`Transaction ${transaction.hash} processed successfully`);
         });
 
         this.transactionMatch.on(ERROR, (error) => {

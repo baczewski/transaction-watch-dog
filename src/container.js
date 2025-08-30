@@ -8,6 +8,7 @@ import RuleModel from './infrastructure/database/models/rule.js';
 import RuleHeadModel from './infrastructure/database/models/rule-heads.js';
 import RuleTransfomer from './interfaces/http/transformers/rule-transformer.js';
 import TransactionModel from './infrastructure/database/models/transaction.js';
+import TransactionTransformer from './interfaces/http/transformers/transaction-transformer.js';
 import { errorHandler } from './interfaces/http/handlers/error-handler.js';
 import logger from './utils/logger.js'
 import TransactionMatcher from './application/services/transaction-matcher.js';
@@ -29,6 +30,7 @@ container.register({
     RuleModel: asValue(RuleModel),
     RuleHeadModel: asValue(RuleHeadModel),
     RuleTransfomer: asClass(RuleTransfomer).singleton(),
+    TransactionTransformer: asClass(TransactionTransformer).singleton(),
     TransactionMatcher: asClass(TransactionMatcher).singleton(),
     TransactionModel: asValue(TransactionModel),
 });
