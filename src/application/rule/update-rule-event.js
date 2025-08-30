@@ -1,4 +1,5 @@
 import BaseEvent from "../base-event.js";
+import { ValidationError } from "../errors/index.js";
 
 class UpdateRuleEvent extends BaseEvent {
     constructor({ ruleRepository }) {
@@ -23,8 +24,8 @@ class UpdateRuleEvent extends BaseEvent {
                 this.emit(NOT_FOUND, `Rule with ID ${ruleId} not found`);
             }
         } catch (error) {
-            if (error.message.startsWith('Validation failed:')) {
-                this.emit(VALIDATION_ERROR, error.message);
+            if (error instanceof ValidationError) {
+                this.emit(VALIDATION_ERROR, error);
                 return;
             }
             this.emit(ERROR, error);

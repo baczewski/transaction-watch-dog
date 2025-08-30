@@ -1,4 +1,5 @@
 import BaseEvent from "../base-event.js";
+import { ValidationError } from "../errors/index.js";
 
 class CreateRuleEvent extends BaseEvent {
     constructor({ ruleRepository }) {
@@ -14,12 +15,11 @@ class CreateRuleEvent extends BaseEvent {
         const { SUCCESS, VALIDATION_ERROR, ERROR } = this.events;
         
         try {
-            // TODO: Handle validation error thrown from rule repository
             const newRule = await this.ruleRepository.create(ruleData);
             this.emit(SUCCESS, newRule);
         } catch (error) {
-            if (error.message.startsWith('Validation failed:')) {
-                this.emit(VALIDATION_ERROR, error.message);
+            if (error instanceof ValidationError) {
+                this.emit(VALIDATION_ERROR, error);
                 return;
             }
             this.emit(ERROR, error);

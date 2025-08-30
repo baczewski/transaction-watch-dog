@@ -1,4 +1,5 @@
 import { createRuleSchema, updateRuleSchema } from '../../application/validation/rule.js';
+import { ValidationError, NotFoundError, ConflictError } from '../../application/errors/index.js';
 
 class RuleRepository {
     constructor({ RuleModel, RuleTransfomer, RuleHeadModel }) {
@@ -21,7 +22,6 @@ class RuleRepository {
         return rule ? this.RuleTransfomer.toDomain(rule) : null;
     }
 
-    // TODO: Add better validation and error handling
     async create(ruleData) {
         const transaction = await this.RuleModel.sequelize.transaction();
 
@@ -46,20 +46,19 @@ class RuleRepository {
             return this.RuleTransfomer.toDomain(rule);
         } catch (error) {
             await transaction.rollback();
+            
             if (error.name === 'ValidationError') {
-                const validationErrors = error.inner.map(err => ({
-                    field: err.path,
-                    message: err.message
-                }));
-                throw new Error(`Validation failed: ${JSON.stringify(validationErrors)}`);
+                throw ValidationError.fromYupError(error);
             }
-            // TODO: Handle unique constraint errors and other DB errors more gracefully
-            console.log(error);
+            
+            if (error.name === 'SequelizeUniqueConstraintError') {
+                throw new ConflictError(`Rule with name '${ruleData.name}' already exists`);
+            }
+            
             throw error;
         }
     }
 
-    // TODO: Add better validation and error handling
     async update(id, updateData) {
         const transaction = await this.RuleModel.sequelize.transaction();
 
@@ -67,7 +66,7 @@ class RuleRepository {
             const existingRule = await this.RuleModel.findByPk(id, { transaction });
 
             if (!existingRule) {
-                return null;
+                throw new NotFoundError('Rule', id);
             }
 
             const validatedData = await updateRuleSchema.validate(updateData, {
@@ -102,14 +101,15 @@ class RuleRepository {
             return this.RuleTransfomer.toDomain(newRule);
         } catch (error) {
             await transaction.rollback();
-            // TODO: Extract and handle different error types more gracefully
-            if (error.name === 'ValidationError') {
-                const validationErrors = error.inner.map(err => ({
-                    field: err.path,
-                    message: err.message
-                }));
-                throw new Error(`Validation failed: ${JSON.stringify(validationErrors)}`);
+            
+            if (error instanceof NotFoundError) {
+                throw error;
             }
+            
+            if (error.name === 'ValidationError') {
+                throw ValidationError.fromYupError(error);
+            }
+            
             throw error;
         }
     }
@@ -120,7 +120,7 @@ class RuleRepository {
         });
 
         if (!ruleHead) {
-            return null;
+            throw new NotFoundError('Rule', id);
         }
         
         await ruleHead.update({ isActive: false });
