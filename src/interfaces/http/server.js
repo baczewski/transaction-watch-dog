@@ -1,6 +1,7 @@
-import express from 'express';
+import express, { json, urlencoded } from 'express';
 import config from '../../infrastructure/config/config.js';
 import cors from 'cors';
+import helmet from 'helmet';
 
 class Server {
     constructor({ router, errorHandler }) {
@@ -12,8 +13,9 @@ class Server {
 
     setupMiddleware() {
         this.express.use(cors({ origin: config.get('cors.origin'), optionsSuccessStatus: 200 }));
-        this.express.use(express.json({ limit: '10mb' }));
-        this.express.use(express.urlencoded({ extended: true, limit: '10mb' }));
+        this.express.use(helmet());
+        this.express.use(json({ limit: '10mb' }));
+        this.express.use(urlencoded({ extended: true, limit: '10mb' }));
     }
 
     start(port) {
