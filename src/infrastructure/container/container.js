@@ -21,6 +21,8 @@ import RateLimiterMiddleware from '../../interfaces/http/middleware/rate-limiter
 import { CreateMatchingTransaction, GetTransactionsByRuleId } from '../../application/use-cases/transaction/index.js';
 import { GetRules, CreateRule, GetRule, DeactivateRule, UpdateRule } from '../../application/use-cases/rule/index.js';
 
+// TODO: inject config
+
 const container = createContainer();
 
 container.register({

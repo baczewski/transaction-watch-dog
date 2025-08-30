@@ -1,15 +1,17 @@
 import express from 'express';
+import config from '../../infrastructure/config/config.js';
+import cors from 'cors';
 
 class Server {
     constructor({ router, errorHandler }) {
         this.express = express();
         this.setupMiddleware();
         this.express.use(router);
-        
         this.express.use(errorHandler);
     }
 
     setupMiddleware() {
+        this.express.use(cors({ origin: config.get('cors.origin'), optionsSuccessStatus: 200 }));
         this.express.use(express.json({ limit: '10mb' }));
         this.express.use(express.urlencoded({ extended: true, limit: '10mb' }));
     }

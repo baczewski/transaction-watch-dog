@@ -60,6 +60,14 @@ const config = convict({
             default: 'redis://localhost:6379',
             env: 'REDIS_URL'
         }
+    },
+    cors: {
+        origin: {
+            doc: 'CORS allowed origin',
+            format: 'Array',
+            default: '*', // Allow all origins by default
+            env: 'CORS_ORIGIN'
+        }
     }
 });
 
