@@ -16,6 +16,10 @@ function createRouter({ containerMiddleware, rateLimiterMiddleware, swaggerMiddl
     apiRooter.use('/docs', swaggerMiddleware.middleware());
     
     router.use('/api',  apiRooter);
+
+    router.use('/', (req, res) => {
+        res.redirect('/api/docs');
+    });
     
     return router;
 }
