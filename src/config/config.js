@@ -13,6 +13,13 @@ const config = convict({
         default: 3000,
         env: 'PORT'
     },
+    infuraProjectId: {
+        doc: 'Infura Project ID for Ethereum network access',
+        format: 'String',
+        default: '',
+        env: 'INFURA_PROJECT_ID',
+        sensitive: true
+    },
     db: {
         host: {
             doc: 'Database host name/IP',

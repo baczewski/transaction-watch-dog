@@ -10,6 +10,9 @@ import { errorHandler } from './interfaces/http/handlers/error-handler.js';
 import logger from './utils/logger.js'
 import TransactionMatcher from './application/services/transaction-matcher.js';
 import { GetRulesEvent, CreateRuleEvent, GetRuleEvent, DeactivateRuleEvent, UpdateRuleEvent } from './application/rule/index.js';
+import { createBlockchainProviders } from './config/blockchain.js';
+import WatchDog from './watch-dog.js';
+import TransactionMatchEvent from './application/transaction/transaction-match-event.js';
 
 const container = createContainer();
 
@@ -41,6 +44,15 @@ container.register({
     getRule: asClass(GetRuleEvent),
     deactivateRule: asClass(DeactivateRuleEvent),
     updateRule: asClass(UpdateRuleEvent),
+    transactionMatch: asClass(TransactionMatchEvent),
+});
+
+const { httpProvider, wsProvider } = createBlockchainProviders();
+
+container.register({
+    httpProvider: asValue(httpProvider),
+    wsProvider: asValue(wsProvider),
+    watchDog: asClass(WatchDog).singleton(),
 });
 
 export default container;
