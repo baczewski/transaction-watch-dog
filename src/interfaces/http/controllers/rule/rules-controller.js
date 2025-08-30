@@ -1,12 +1,13 @@
 import { StatusCodes } from 'http-status-codes';
 
 class RulesController {
-    constructor({ createRule, getRules, getRule, deactivateRule, updateRule }) {
+    constructor({ createRule, getRules, getRule, deactivateRule, updateRule, ruleCacheService }) {
         this.createRule = createRule;
         this.getRules = getRules;
         this.getRule = getRule;
         this.deactivateRule = deactivateRule;
         this.updateRule = updateRule;
+        this.ruleCacheService = ruleCacheService;
     }
 
     create(req, res, next) {
@@ -15,6 +16,7 @@ class RulesController {
 
         createRule
             .on(SUCCESS, (rule) => {
+                this.ruleCacheService.notifyRuleUpdate(rule.id, 'create');
                 res.status(StatusCodes.CREATED).json(rule);
             })
             .on(VALIDATION_ERROR, (error) => {
@@ -71,6 +73,7 @@ class RulesController {
 
         deactivateRule
             .on(SUCCESS, () => {
+                this.ruleCacheService.notifyRuleUpdate(id, 'deactivate');
                 res.status(StatusCodes.OK).send();
             })
             .on(NOT_FOUND, (message) => {
@@ -90,6 +93,7 @@ class RulesController {
 
         updateRule
             .on(SUCCESS, (rule) => {
+                this.ruleCacheService.notifyRuleUpdate(id, 'update');
                 res.status(StatusCodes.OK).json(rule);
             })
             .on(VALIDATION_ERROR, (error) => {

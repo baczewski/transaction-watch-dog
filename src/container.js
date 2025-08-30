@@ -17,6 +17,8 @@ import { createBlockchainProviders } from './config/blockchain.js';
 import WatchDog from './watch-dog.js';
 import TransactionMatchEvent from './application/transaction/transaction-match-event.js';
 import GetTransactionsByRuleIdEvent from './application/transaction/get-transactions-by-rule-id-event.js';
+import RedisService from './infrastructure/services/redis-service.js';
+import RuleCacheService from './infrastructure/services/rule-cache-service.js';
 
 const container = createContainer();
 
@@ -43,6 +45,8 @@ container.register({
 container.register({
     ruleRepository: asClass(RuleRepository).singleton(),
     transactionRepository: asClass(TransactionRepository).singleton(),
+    redisService: asClass(RedisService).singleton(),
+    ruleCacheService: asClass(RuleCacheService).singleton(),
 });
 
 container.register({

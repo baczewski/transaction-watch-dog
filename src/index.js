@@ -12,17 +12,27 @@ import Transaction from './infrastructure/database/models/transaction.js';
 import { defineAssociations } from './infrastructure/database/models/associations.js';
 defineAssociations();
 
-try {
-    await sequelize.authenticate();
-    logger.info('Database connection has been established successfully.');
-    await sequelize.sync({ alter: true }); 
-} catch (error) {
-    logger.error('Unable to connect to the database:', error);
-    process.exit(1);
-}
+// try {
+//     await sequelize.authenticate();
+//     logger.info('Database connection has been established successfully.');
+//     await sequelize.sync({ alter: true }); 
+// } catch (error) {
+//     logger.error('Unable to connect to the database:', error);
+//     process.exit(1);
+// }
 
-// const watchDog = container.resolve('watchDog');
-// watchDog.start();
+const redisService = container.resolve('redisService');
+await redisService.connect();
+const ruleCacheService = container.resolve('ruleCacheService');
+await ruleCacheService.initialize();
+
+// await ruleCacheService.notifyRuleUpdate(123123, 'create');
+// await ruleCacheService.getCachedRules().then(rules => {
+//     console.log('Cached Rules:', rules);
+// });
+
+const watchDog = container.resolve('watchDog');
+watchDog.start();
 
 // // const matcher = container.resolve('TransactionMatcher');
 // // const matchingRule = await matcher.matchTransaction({ id: 1, value: '100000000000000000000', description: 'Test transaction' });

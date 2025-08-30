@@ -28,12 +28,12 @@ const FIELD_EXTRACTORS = {
 };
 
 class TransactionMatcher {
-    constructor({ ruleRepository }) {
-        this.ruleRepository = ruleRepository;
+    constructor({ ruleCacheService }) {
+        this.ruleRepository = ruleCacheService;
     }
 
     async matchTransaction(transaction) {
-        const rules = await this.ruleRepository.getAll();
+        const rules = await this.ruleRepository.getCachedRules();
         return rules.find((rule) => this.matchesRule(transaction, rule));
     }
 

@@ -52,6 +52,14 @@ const config = convict({
             default: 5432,
             env: 'DATABASE_PORT'
         }
+    },
+    redis: {
+        url: {
+            doc: 'Redis connection URL',
+            format: 'String',
+            default: 'redis://localhost:6379',
+            env: 'REDIS_URL'
+        }
     }
 });
 
