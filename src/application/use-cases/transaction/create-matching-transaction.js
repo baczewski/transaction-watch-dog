@@ -1,7 +1,7 @@
-import BaseEvent from "../base-event.js";
-import { ValidationError } from "../errors/validation-error.js";
+import BaseUseCase from "../../shared/base-use-case.js";
+import { ValidationError } from "../../errors/validation-error.js";
 
-class CreateMatchingTransaction extends BaseEvent {
+class CreateMatchingTransaction extends BaseUseCase {
     constructor({ logger, transactionRepository }) {
         super({
             SUCCESS: 'SUCCESS',

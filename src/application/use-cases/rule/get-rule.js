@@ -1,7 +1,7 @@
-import BaseEvent from "../shared/base-use-case.js";
-import { NotFoundError } from "../errors/not-found-error.js";
+import BaseUseCase from "../../shared/base-use-case.js";
+import { NotFoundError } from "../../errors/not-found-error.js";
 
-class GetRule extends BaseEvent {
+class GetRule extends BaseUseCase {
     constructor({ ruleRepository }) {
         super({
             SUCCESS: 'SUCCESS',

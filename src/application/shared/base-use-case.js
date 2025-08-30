@@ -1,6 +1,6 @@
 import EventEmitter from 'node:events';
 
-class BaseEvent extends EventEmitter {
+class BaseUseCase extends EventEmitter {
     constructor(events) {
         super();
         this.events = Object.freeze(events);
@@ -16,4 +16,4 @@ class BaseEvent extends EventEmitter {
     }
 }
 
-export default BaseEvent;
+export default BaseUseCase;

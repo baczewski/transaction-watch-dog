@@ -1,6 +1,6 @@
-import BaseEvent from "../base-event.js";
+import BaseUseCase from "../../shared/base-use-case.js";
 
-class GetTransactionsByRuleId extends BaseEvent {
+class GetTransactionsByRuleId extends BaseUseCase {
     constructor({ transactionRepository }) {
         super({
             SUCCESS: 'SUCCESS',

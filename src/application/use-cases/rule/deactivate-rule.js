@@ -1,7 +1,7 @@
-import BaseEvent from "../base-event.js";
-import { NotFoundError } from "../errors/not-found-error.js";
+import BaseUseCase from "../../shared/base-use-case.js";
+import { NotFoundError } from "../../errors/not-found-error.js";
 
-class DeactivateRule extends BaseEvent {
+class DeactivateRule extends BaseUseCase {
     constructor({ ruleRepository }) {
         super({
             SUCCESS: 'SUCCESS',

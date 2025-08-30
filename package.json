@@ -1,7 +1,7 @@
 {
   "scripts": {
-    "start": "node src/index.js",
-    "dev": "nodemon src/index.js",
+    "start": "node src/infrastructure/bootstrap/index.js",
+    "dev": "nodemon src/infrastructure/bootstrap/index.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },

@@ -1,6 +1,6 @@
-import BaseEvent from "../base-event.js";
+import BaseUseCase from "../../shared/base-use-case.js";
 
-class GetRules extends BaseEvent {
+class GetRules extends BaseUseCase {
     constructor({ ruleRepository }) {
         super({
             SUCCESS: 'SUCCESS',
