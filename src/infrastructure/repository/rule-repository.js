@@ -1,5 +1,4 @@
-import { createRuleSchema, updateRuleSchema } from '../../application/validation/rule.js';
-import { ValidationError, NotFoundError, ConflictError } from '../../application/errors/index.js';
+import { NotFoundError, ConflictError } from '../../application/errors/index.js';
 
 class RuleRepository {
     constructor({ RuleModel, RuleTransfomer, RuleHeadModel }) {
@@ -34,18 +33,13 @@ class RuleRepository {
         const transaction = await this.RuleModel.sequelize.transaction();
 
         try {
-            const validatedData = await createRuleSchema.validate(ruleData, {
-                abortEarly: false,
-                stripUnknown: true
-            });
-
             const rule = await this.RuleModel.create(
-                this.RuleTransfomer.toPersistence(validatedData),
+                this.RuleTransfomer.toPersistence(ruleData),
                 { transaction }
             );
 
             await this.RuleHeadModel.upsert({
-                name: validatedData.name,
+                name: ruleData.name,
                 currentRuleId: rule.id,
                 isActive: true
             }, { transaction });
@@ -54,11 +48,7 @@ class RuleRepository {
             return this.RuleTransfomer.toDomain(rule);
         } catch (error) {
             await transaction.rollback();
-            
-            if (error.name === 'ValidationError') {
-                throw ValidationError.fromYupError(error);
-            }
-            
+
             if (error.name === 'SequelizeUniqueConstraintError') {
                 throw new ConflictError(`Rule with name '${ruleData.name}' already exists`);
             }
@@ -77,18 +67,13 @@ class RuleRepository {
                 include: [{ model: this.RuleModel, as: 'currentRule' }]
             });
 
-            const validatedData = await updateRuleSchema.validate(updateData, {
-                abortEarly: false,
-                stripUnknown: true
-            });
-
             const newRuleData = {
                 name: ruleHead.name,
                 version: ruleHead.currentRule.version + 1,
                 blockConfirmationDelay: ruleHead.currentRule.blockConfirmationDelay,
                 conditions: ruleHead.currentRule.conditions,
                 metadata: ruleHead.metadata,
-                ...validatedData
+                ...updateData
             };
 
             const newRule = await this.RuleModel.create(
@@ -108,9 +93,7 @@ class RuleRepository {
             if (error.name === 'SequelizeEmptyResultError') {
                 throw new NotFoundError('Rule', id);    
             }
-            if (error.name === 'ValidationError') {
-                throw ValidationError.fromYupError(error);
-            }
+
             throw error;
         }
     }

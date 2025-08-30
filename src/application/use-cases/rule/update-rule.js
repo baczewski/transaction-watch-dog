@@ -1,5 +1,6 @@
 import BaseUseCase from "../../shared/base-use-case.js";
 import { NotFoundError, ValidationError } from "../../errors/index.js";
+import { updateRuleSchema } from "../../validation/rule.js";
 
 class UpdateRule extends BaseUseCase {
     constructor({ ruleRepository }) {
@@ -16,15 +17,20 @@ class UpdateRule extends BaseUseCase {
         const { SUCCESS, ERROR, NOT_FOUND, VALIDATION_ERROR } = this.events;
 
         try {
-            const updatedRule = await this.ruleRepository.update(ruleId, updateData);
+            const validatedData = await updateRuleSchema.validate(updateData, {
+                abortEarly: false,
+                stripUnknown: true
+            });
+
+            const updatedRule = await this.ruleRepository.update(ruleId, validatedData);
             this.emit(SUCCESS, updatedRule);
         } catch (error) {
-            if (error instanceof NotFoundError) {
-                this.emit(NOT_FOUND, error.message);
+            if (error.name === 'ValidationError') {
+                this.emit(VALIDATION_ERROR, ValidationError.fromYupError(error));
                 return;
             }
-            if (error instanceof ValidationError) {
-                this.emit(VALIDATION_ERROR, error);
+            if (error instanceof NotFoundError) {
+                this.emit(NOT_FOUND, error.message);
                 return;
             }
             this.emit(ERROR, error);

@@ -1,5 +1,6 @@
 import BaseUseCase from "../../shared/base-use-case.js";
 import { ValidationError } from "../../errors/validation-error.js";
+import { createTransactionSchema } from "../../validation/transaction.js";
 
 class CreateMatchingTransaction extends BaseUseCase {
     constructor({ logger, transactionRepository }) {
@@ -25,11 +26,16 @@ class CreateMatchingTransaction extends BaseUseCase {
         };
 
         try {
-            const createdTransaction = await this.transactionRepository.create(transactionData);
+            const validatedData = await createTransactionSchema.validate(transactionData, {
+                abortEarly: false,
+                stripUnknown: true
+            });
+
+            const createdTransaction = await this.transactionRepository.create(validatedData);
             this.emit(SUCCESS, createdTransaction);
         } catch (error) {
-            if (error instanceof ValidationError) {
-                this.emit(VALIDATION_ERROR, error);
+            if (error.name === 'ValidationError') {
+                this.emit(VALIDATION_ERROR, ValidationError.fromYupError(error));
                 return;
             }
             this.emit(ERROR, error);

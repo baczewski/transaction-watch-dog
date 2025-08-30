@@ -1,5 +1,6 @@
 import BaseUseCase from "../../shared/base-use-case.js";
 import { ValidationError } from "../../errors/index.js";
+import { createRuleSchema } from "../../validation/rule.js";
 
 class CreateRule extends BaseUseCase {
     constructor({ ruleRepository }) {
@@ -15,11 +16,16 @@ class CreateRule extends BaseUseCase {
         const { SUCCESS, VALIDATION_ERROR, ERROR } = this.events;
         
         try {
-            const newRule = await this.ruleRepository.create(ruleData);
+            const validatedData = await createRuleSchema.validate(ruleData, {
+                abortEarly: false,
+                stripUnknown: true
+            });
+
+            const newRule = await this.ruleRepository.create(validatedData);
             this.emit(SUCCESS, newRule);
         } catch (error) {
-            if (error instanceof ValidationError) {
-                this.emit(VALIDATION_ERROR, error);
+            if (error.name === 'ValidationError') {
+                this.emit(VALIDATION_ERROR, ValidationError.fromYupError(error));
                 return;
             }
             this.emit(ERROR, error);

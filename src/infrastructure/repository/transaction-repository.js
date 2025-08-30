@@ -1,4 +1,4 @@
-import { ValidationError } from '../../application/errors/validation-error.js';
+import { ConflictError } from '../../application/errors/conflict-error.js';
 import { createTransactionSchema } from '../../application/validation/transaction.js';
 
 class TransactionRepository {
@@ -27,8 +27,8 @@ class TransactionRepository {
             const transaction = await this.TransactionModel.create(validatedData);
             return this.TransactionTransformer.toDomain(transaction);
         } catch (error) {
-            if (error.name === 'ValidationError') {
-                throw ValidationError.fromYupError(error);
+            if (error.name === 'SequelizeUniqueConstraintError') {
+                throw new ConflictError(`Transaction with hash '${transactionData.hash}' already exists`);
             }
             throw error;
         }
