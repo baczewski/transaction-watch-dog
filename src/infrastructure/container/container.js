@@ -4,10 +4,7 @@ import TransactionRepository from '../repository/transaction-repository.js';
 import Server from '../../interfaces/http/server.js';
 import { scopePerRequest } from 'awilix-express';
 import createRouter from '../../interfaces/http/router.js';
-import RuleModel from '../database/models/rule.js';
-import RuleHeadModel from '../database/models/rule-heads.js';
 import RuleTransfomer from '../../interfaces/http/transformers/rule-transformer.js';
-import TransactionModel from '../database/models/transaction.js';
 import TransactionTransformer from '../../interfaces/http/transformers/transaction-transformer.js';
 import { errorHandler } from '../../interfaces/http/handlers/error-handler.js';
 import logger from '../logging/logger.js'
@@ -21,6 +18,7 @@ import SwaggerMiddleware from '../../interfaces/http/middleware/swagger.js';
 
 import { CreateMatchingTransaction, GetTransactionsByRuleId } from '../../application/use-cases/transaction/index.js';
 import { GetRules, CreateRule, GetRule, DeactivateRule, UpdateRule } from '../../application/use-cases/rule/index.js';
+import { RuleModel, RuleHeadModel, TransactionModel } from '../database/models/index.js';
 
 // TODO: inject config
 
