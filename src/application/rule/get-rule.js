@@ -1,7 +1,7 @@
 import BaseEvent from "../base-event.js";
 import { NotFoundError } from "../errors/not-found-error.js";
 
-class DeactivateRuleEvent extends BaseEvent {
+class GetRule extends BaseEvent {
     constructor({ ruleRepository }) {
         super({
             SUCCESS: 'SUCCESS',
@@ -11,11 +11,11 @@ class DeactivateRuleEvent extends BaseEvent {
         this.ruleRepository = ruleRepository;
     }
 
-    async execute(id) {
+    async execute(ruleId) {
         const { SUCCESS, ERROR, NOT_FOUND } = this.events;
-
+        
         try {
-            const rule = await this.ruleRepository.deactivate(id);
+            const rule = await this.ruleRepository.getById(ruleId);
             this.emit(SUCCESS, rule);
         } catch (error) {
             if (error instanceof NotFoundError) {
@@ -24,8 +24,7 @@ class DeactivateRuleEvent extends BaseEvent {
             }
             this.emit(ERROR, error);
         }
-        
     }
 }
 
-export default DeactivateRuleEvent;
+export default GetRule;

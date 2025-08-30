@@ -12,13 +12,13 @@ import TransactionTransformer from './interfaces/http/transformers/transaction-t
 import { errorHandler } from './interfaces/http/handlers/error-handler.js';
 import logger from './utils/logger.js'
 import TransactionMatcher from './application/services/transaction-matcher.js';
-import { GetRulesEvent, CreateRuleEvent, GetRuleEvent, DeactivateRuleEvent, UpdateRuleEvent } from './application/rule/index.js';
 import { createBlockchainProviders } from './config/blockchain.js';
 import WatchDog from './watch-dog.js';
-import TransactionMatchEvent from './application/transaction/transaction-match-event.js';
-import GetTransactionsByRuleIdEvent from './application/transaction/get-transactions-by-rule-id-event.js';
 import RedisService from './infrastructure/services/redis-service.js';
 import RuleCacheService from './infrastructure/services/rule-cache-service.js';
+
+import { CreateMatchingTransaction, GetTransactionsByRuleId } from './application/transaction/index.js';
+import { GetRules, CreateRule, GetRule, DeactivateRule, UpdateRule } from './application/rule/index.js';
 
 const container = createContainer();
 
@@ -50,13 +50,13 @@ container.register({
 });
 
 container.register({
-    createRule: asClass(CreateRuleEvent),
-    getRules: asClass(GetRulesEvent),
-    getRule: asClass(GetRuleEvent),
-    deactivateRule: asClass(DeactivateRuleEvent),
-    updateRule: asClass(UpdateRuleEvent),
-    transactionMatch: asClass(TransactionMatchEvent),
-    getTransactionsByRuleId: asClass(GetTransactionsByRuleIdEvent),
+    createRule: asClass(CreateRule),
+    getRules: asClass(GetRules),
+    getRule: asClass(GetRule),
+    deactivateRule: asClass(DeactivateRule),
+    updateRule: asClass(UpdateRule),
+    createMatchingTransaction: asClass(CreateMatchingTransaction),
+    getTransactionsByRuleId: asClass(GetTransactionsByRuleId),
 });
 
 const { httpProvider, wsProvider } = createBlockchainProviders();

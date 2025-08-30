@@ -1,6 +1,6 @@
 import BaseEvent from "../base-event.js";
 
-class GetTransactionsByRuleIdEvent extends BaseEvent {
+class GetTransactionsByRuleId extends BaseEvent {
     constructor({ transactionRepository }) {
         super({
             SUCCESS: 'SUCCESS',
@@ -21,4 +21,4 @@ class GetTransactionsByRuleIdEvent extends BaseEvent {
     }
 }
 
-export default GetTransactionsByRuleIdEvent;
+export default GetTransactionsByRuleId;

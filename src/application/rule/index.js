@@ -1,5 +1,5 @@
-export { default as CreateRuleEvent } from './create-rule-event.js';
-export { default as GetRulesEvent } from './get-rules-event.js';
-export { default as GetRuleEvent } from './get-rule-event.js';
-export { default as DeactivateRuleEvent } from './deactivate-rule-event.js';
-export { default as UpdateRuleEvent } from './update-rule-event.js';
+export { default as CreateRule } from './create-rule.js';
+export { default as GetRules } from './get-rules.js';
+export { default as GetRule } from './get-rule.js';
+export { default as DeactivateRule } from './deactivate-rule.js';
+export { default as UpdateRule } from './update-rule.js';

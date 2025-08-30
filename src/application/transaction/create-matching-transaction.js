@@ -1,7 +1,7 @@
 import BaseEvent from "../base-event.js";
 import { ValidationError } from "../errors/validation-error.js";
 
-class TransactionMatchEvent extends BaseEvent {
+class CreateMatchingTransaction extends BaseEvent {
     constructor({ logger, transactionRepository }) {
         super({
             SUCCESS: 'SUCCESS',
@@ -37,4 +37,4 @@ class TransactionMatchEvent extends BaseEvent {
     }
 }
 
-export default TransactionMatchEvent;
+export default CreateMatchingTransaction;

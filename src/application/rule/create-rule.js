@@ -1,7 +1,7 @@
 import BaseEvent from "../base-event.js";
 import { ValidationError } from "../errors/index.js";
 
-class CreateRuleEvent extends BaseEvent {
+class CreateRule extends BaseEvent {
     constructor({ ruleRepository }) {
         super({
             SUCCESS: 'SUCCESS',
@@ -27,4 +27,4 @@ class CreateRuleEvent extends BaseEvent {
     }
 }
 
-export default CreateRuleEvent;
+export default CreateRule;

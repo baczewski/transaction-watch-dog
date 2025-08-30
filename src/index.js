@@ -40,8 +40,8 @@ watchDog.start();
 
 config.validate({ allowed: 'strict' });
 
-const server = container.resolve('server');
-server.start(config.get('port'));
+// const server = container.resolve('server');
+// server.start(config.get('port'));
 
 // // logger.info('Hello World!');
 // // logger.info(JSON.stringify(config.get('db')));

@@ -1,10 +1,10 @@
 class WatchDog {
-    constructor({ logger, wsProvider, httpProvider, TransactionMatcher, transactionMatch }) {
+    constructor({ logger, wsProvider, httpProvider, TransactionMatcher, createMatchingTransaction }) {
         this.logger = logger;
         this.wsProvider = wsProvider;
         this.httpProvider = httpProvider;
         this.TransactionMatcher = TransactionMatcher;
-        this.transactionMatch = transactionMatch;
+        this.createMatchingTransaction = createMatchingTransaction;
     }
 
     start() {
@@ -14,13 +14,13 @@ class WatchDog {
     }
 
     registerTransactionMatchEvents() {
-        const { SUCCESS, ERROR } = this.transactionMatch.events;
+        const { SUCCESS, ERROR } = this.createMatchingTransaction.events;
 
-        this.transactionMatch.on(SUCCESS, (transaction) => {
+        this.createMatchingTransaction.on(SUCCESS, (transaction) => {
             this.logger.info(`Transaction ${transaction.hash} processed successfully`);
         });
 
-        this.transactionMatch.on(ERROR, (error) => {
+        this.createMatchingTransaction.on(ERROR, (error) => {
             this.logger.error('Error processing transaction match:', error);
         });
     }
@@ -73,7 +73,7 @@ class WatchDog {
 
         if (matchingRule) {
             this.logger.info(`Transaction ${tx.hash} matched rule ${matchingRule.id}`);
-            await this.transactionMatch.execute(tx, matchingRule);
+            await this.createMatchingTransaction.execute(tx, matchingRule);
         }
     }
 }

@@ -1,7 +1,7 @@
 import BaseEvent from "../base-event.js";
 import { NotFoundError, ValidationError } from "../errors/index.js";
 
-class UpdateRuleEvent extends BaseEvent {
+class UpdateRule extends BaseEvent {
     constructor({ ruleRepository }) {
         super({
             SUCCESS: 'SUCCESS',
@@ -32,4 +32,4 @@ class UpdateRuleEvent extends BaseEvent {
     }
 }
 
-export default UpdateRuleEvent;
+export default UpdateRule;

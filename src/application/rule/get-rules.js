@@ -1,6 +1,6 @@
 import BaseEvent from "../base-event.js";
 
-class GetRulesEvent extends BaseEvent {
+class GetRules extends BaseEvent {
     constructor({ ruleRepository }) {
         super({
             SUCCESS: 'SUCCESS',
@@ -21,4 +21,4 @@ class GetRulesEvent extends BaseEvent {
     }
 }
 
-export default GetRulesEvent;
+export default GetRules;
