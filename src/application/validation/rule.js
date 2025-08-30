@@ -33,7 +33,7 @@ export const createRuleSchema = yup.object({
         .min(1, 'At least one condition is required')
         .required('Conditions are required'),
     
-    metadata: yup.object()
+    metadata: yup.mixed()
         .default({}),
     
     changeReason: yup.string()
@@ -63,7 +63,7 @@ export const updateRuleSchema = yup.object({
         .min(1, 'At least one condition is required')
         .optional(),
     
-    metadata: yup.object()
+    metadata: yup.mixed()
         .optional()
 }).test(
     'at-least-one-field',
