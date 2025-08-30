@@ -16,6 +16,7 @@ import { GetRulesEvent, CreateRuleEvent, GetRuleEvent, DeactivateRuleEvent, Upda
 import { createBlockchainProviders } from './config/blockchain.js';
 import WatchDog from './watch-dog.js';
 import TransactionMatchEvent from './application/transaction/transaction-match-event.js';
+import GetTransactionsByRuleIdEvent from './application/transaction/get-transactions-by-rule-id-event.js';
 
 const container = createContainer();
 
@@ -51,6 +52,7 @@ container.register({
     deactivateRule: asClass(DeactivateRuleEvent),
     updateRule: asClass(UpdateRuleEvent),
     transactionMatch: asClass(TransactionMatchEvent),
+    getTransactionsByRuleId: asClass(GetTransactionsByRuleIdEvent),
 });
 
 const { httpProvider, wsProvider } = createBlockchainProviders();

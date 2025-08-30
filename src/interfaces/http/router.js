@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import rulesRouter from './routes/rules.js';
+import transactionsRouter from './routes/transactions.js';
 
 function createRouter({ containerMiddleware }) {
     const router = Router();
@@ -8,6 +9,7 @@ function createRouter({ containerMiddleware }) {
     apiRooter.use(containerMiddleware);
 
     apiRooter.use('/rules', rulesRouter);
+    apiRooter.use('/transactions', transactionsRouter);
     router.use('/api',  apiRooter);
     
     return router;
