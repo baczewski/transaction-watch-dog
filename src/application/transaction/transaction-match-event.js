@@ -1,24 +1,37 @@
 import BaseEvent from "../base-event.js";
+import { ValidationError } from "../errors/validation-error.js";
 
 class TransactionMatchEvent extends BaseEvent {
-    constructor({ logger }) {
+    constructor({ logger, transactionRepository }) {
         super({
             SUCCESS: 'SUCCESS',
-            ERROR: 'ERROR'
+            ERROR: 'ERROR',
+            VALIDATION_ERROR: 'VALIDATION_ERROR'
         });
         this.logger = logger;
+        this.transactionRepository = transactionRepository;
     }
 
     async execute(transaction, rule) {
-        const { SUCCESS, ERROR } = this.events;
+        const { SUCCESS, ERROR, VALIDATION_ERROR } = this.events;
+
+        const transactionData = {
+            hash: transaction.hash,
+            from: transaction.from,
+            to: transaction.to,
+            value: transaction.value,
+            blockNumber: transaction.blockNumber,
+            ruleId: rule.id,
+        };
 
         try {
-            this.logger.info('Processing transaction match');
-
-            // TODO: Persist the match to the database or trigger further actions
-            this.emit(SUCCESS, { transaction, rule });
+            const createdTransaction = await this.transactionRepository.create(transactionData);
+            this.emit(SUCCESS, createdTransaction);
         } catch (error) {
-            this.logger.error('Error processing transaction match', error);
+            if (error instanceof ValidationError) {
+                this.emit(VALIDATION_ERROR, error);
+                return;
+            }
             this.emit(ERROR, error);
         }
     }

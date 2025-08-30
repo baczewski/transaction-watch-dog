@@ -7,6 +7,7 @@ import sequelize from './config/database.js';
 // TODO: Load all models dynamically
 import Rule from './infrastructure/database/models/rule.js';
 import RuleHead from './infrastructure/database/models/rule-heads.js';
+import Transaction from './infrastructure/database/models/transaction.js';
 
 import { defineAssociations } from './infrastructure/database/models/associations.js';
 defineAssociations();

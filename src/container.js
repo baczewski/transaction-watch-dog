@@ -1,11 +1,13 @@
 import { asClass, asFunction, asValue, createContainer } from 'awilix';
 import RuleRepository from './infrastructure/repository/rule-repository.js';
+import TransactionRepository from './infrastructure/repository/transaction-repository.js';
 import Server from './interfaces/http/server.js';
 import { scopePerRequest } from 'awilix-express';
 import createRouter from './interfaces/http/router.js';
 import RuleModel from './infrastructure/database/models/rule.js';
 import RuleHeadModel from './infrastructure/database/models/rule-heads.js';
 import RuleTransfomer from './interfaces/http/transformers/rule-transformer.js';
+import TransactionModel from './infrastructure/database/models/transaction.js';
 import { errorHandler } from './interfaces/http/handlers/error-handler.js';
 import logger from './utils/logger.js'
 import TransactionMatcher from './application/services/transaction-matcher.js';
@@ -28,6 +30,7 @@ container.register({
     RuleHeadModel: asValue(RuleHeadModel),
     RuleTransfomer: asClass(RuleTransfomer).singleton(),
     TransactionMatcher: asClass(TransactionMatcher).singleton(),
+    TransactionModel: asValue(TransactionModel),
 });
 
 container.register({
@@ -36,6 +39,7 @@ container.register({
 
 container.register({
     ruleRepository: asClass(RuleRepository).singleton(),
+    transactionRepository: asClass(TransactionRepository).singleton(),
 });
 
 container.register({
