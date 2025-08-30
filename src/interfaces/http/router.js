@@ -2,7 +2,7 @@ import { Router } from 'express';
 import rulesRouter from './routes/rules.js';
 import transactionsRouter from './routes/transactions.js';
 
-function createRouter({ containerMiddleware, rateLimiterMiddleware }) {
+function createRouter({ containerMiddleware, rateLimiterMiddleware, swaggerMiddleware }) {
     const router = Router();
     const apiRooter = Router();
 
@@ -11,6 +11,8 @@ function createRouter({ containerMiddleware, rateLimiterMiddleware }) {
 
     apiRooter.use('/rules', rulesRouter);
     apiRooter.use('/transactions', transactionsRouter);
+    apiRooter.use('/docs', swaggerMiddleware.middleware());
+    
     router.use('/api',  apiRooter);
     
     return router;

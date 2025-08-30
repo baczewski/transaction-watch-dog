@@ -17,6 +17,7 @@ import WatchDog from '../../application/services/watch-dog.js';
 import RedisService from '../services/redis-service.js';
 import RuleCacheService from '../services/rule-cache-service.js';
 import RateLimiterMiddleware from '../../interfaces/http/middleware/rate-limiter.js';
+import SwaggerMiddleware from '../../interfaces/http/middleware/swagger.js';
 
 import { CreateMatchingTransaction, GetTransactionsByRuleId } from '../../application/use-cases/transaction/index.js';
 import { GetRules, CreateRule, GetRule, DeactivateRule, UpdateRule } from '../../application/use-cases/rule/index.js';
@@ -44,6 +45,7 @@ container.register({
 container.register({
     containerMiddleware: asValue(scopePerRequest(container)),
     rateLimiterMiddleware: asClass(RateLimiterMiddleware).singleton(),
+    swaggerMiddleware: asClass(SwaggerMiddleware).singleton(),
 });
 
 container.register({

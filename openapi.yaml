@@ -1,0 +1,21 @@
+openapi: 3.0.0
+info:
+  title: Transaction Watch Dog API
+  version: 1.0.0
+  description: Comprehensive API documentation for Transaction Watch Dog service.
+
+servers:
+  - url: http://localhost:3000/api
+paths:
+  /rules:
+    get:
+      summary: Retrieve all active rules
+      responses:
+        '200':
+          description: A list of active rules
+          content:
+            application/json:
+              schema:
+                type: array
+  
+# TODO: Come back here if time left
