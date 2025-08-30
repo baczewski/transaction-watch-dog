@@ -1,5 +1,5 @@
 import BaseEvent from "../base-event.js";
-import { ValidationError } from "../errors/index.js";
+import { NotFoundError, ValidationError } from "../errors/index.js";
 
 class UpdateRuleEvent extends BaseEvent {
     constructor({ ruleRepository }) {
@@ -17,13 +17,12 @@ class UpdateRuleEvent extends BaseEvent {
 
         try {
             const updatedRule = await this.ruleRepository.update(ruleId, updateData);
-
-            if (updatedRule) {
-                this.emit(SUCCESS, updatedRule);
-            } else {
-                this.emit(NOT_FOUND, `Rule with ID ${ruleId} not found`);
-            }
+            this.emit(SUCCESS, updatedRule);
         } catch (error) {
+            if (error instanceof NotFoundError) {
+                this.emit(NOT_FOUND, error.message);
+                return;
+            }
             if (error instanceof ValidationError) {
                 this.emit(VALIDATION_ERROR, error);
                 return;

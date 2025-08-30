@@ -17,9 +17,17 @@ class RuleRepository {
         return ruleHeads.map(head => this.RuleTransfomer.toDomain(head.currentRule));
     }
 
+    // TODO: Switch to RuleHead and include currentRule
     async getById(id) {
-        const rule = await this.RuleModel.findByPk(id);
-        return rule ? this.RuleTransfomer.toDomain(rule) : null;
+        try {
+            const rule = await this.RuleModel.findByPk(id, { rejectOnEmpty: true });
+            return this.RuleTransfomer.toDomain(rule);
+        } catch (error) {
+            if (error.name === 'SequelizeEmptyResultError') {
+                throw new NotFoundError('Rule', id);    
+            }
+            throw error;
+        }
     }
 
     async create(ruleData) {
@@ -63,11 +71,10 @@ class RuleRepository {
         const transaction = await this.RuleModel.sequelize.transaction();
 
         try {
-            const existingRule = await this.RuleModel.findByPk(id, { transaction });
-
-            if (!existingRule) {
-                throw new NotFoundError('Rule', id);
-            }
+            const existingRule = await this.RuleModel.findByPk(id, { 
+                transaction, 
+                rejectOnEmpty: true 
+            });
 
             const validatedData = await updateRuleSchema.validate(updateData, {
                 abortEarly: false,
@@ -102,29 +109,31 @@ class RuleRepository {
         } catch (error) {
             await transaction.rollback();
             
-            if (error instanceof NotFoundError) {
-                throw error;
+            if (error.name === 'SequelizeEmptyResultError') {
+                throw new NotFoundError('Rule', id);    
             }
-            
             if (error.name === 'ValidationError') {
                 throw ValidationError.fromYupError(error);
             }
-            
             throw error;
         }
     }
 
     async deactivate(id) {
-        const ruleHead = await this.RuleHeadModel.findOne({ 
-            where: { currentRuleId: id } 
-        });
+        try {
+            const ruleHead = await this.RuleHeadModel.findOne({ 
+                where: { currentRuleId: id },
+                rejectOnEmpty: true 
+            });
 
-        if (!ruleHead) {
-            throw new NotFoundError('Rule', id);
+            await ruleHead.update({ isActive: false });
+            return this.RuleTransfomer.toDomain(ruleHead);
+        } catch (error) {
+            if (error.name === 'SequelizeEmptyResultError') {
+                throw new NotFoundError('Rule', id);    
+            }
+            throw error;
         }
-        
-        await ruleHead.update({ isActive: false });
-        return this.RuleTransfomer.toDomain(ruleHead);
     }
 }
 

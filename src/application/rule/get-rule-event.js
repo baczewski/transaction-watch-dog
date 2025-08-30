@@ -1,4 +1,5 @@
 import BaseEvent from "../base-event.js";
+import { NotFoundError } from "../errors/not-found-error.js";
 
 class GetRuleEvent extends BaseEvent {
     constructor({ ruleRepository }) {
@@ -15,13 +16,12 @@ class GetRuleEvent extends BaseEvent {
         
         try {
             const rule = await this.ruleRepository.getById(ruleId);
-
-            if (rule) {
-                this.emit(SUCCESS, rule);
-            } else {
-                this.emit(NOT_FOUND, `Rule with ID ${ruleId} not found`);
-            }
+            this.emit(SUCCESS, rule);
         } catch (error) {
+            if (error instanceof NotFoundError) {
+                this.emit(NOT_FOUND, error.message);
+                return;
+            }
             this.emit(ERROR, error);
         }
     }
