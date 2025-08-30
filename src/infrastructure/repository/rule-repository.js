@@ -71,9 +71,10 @@ class RuleRepository {
         const transaction = await this.RuleModel.sequelize.transaction();
 
         try {
-            const existingRule = await this.RuleModel.findByPk(id, { 
+            const ruleHead = await this.RuleHeadModel.findByPk(id, { 
                 transaction, 
-                rejectOnEmpty: true 
+                rejectOnEmpty: true,
+                include: [{ model: this.RuleModel, as: 'currentRule' }]
             });
 
             const validatedData = await updateRuleSchema.validate(updateData, {
@@ -82,11 +83,11 @@ class RuleRepository {
             });
 
             const newRuleData = {
-                name: existingRule.name,
-                version: existingRule.version + 1,
-                blockConfirmationDelay: existingRule.blockConfirmationDelay,
-                conditions: existingRule.conditions,
-                metadata: existingRule.metadata,
+                name: ruleHead.name,
+                version: ruleHead.currentRule.version + 1,
+                blockConfirmationDelay: ruleHead.currentRule.blockConfirmationDelay,
+                conditions: ruleHead.currentRule.conditions,
+                metadata: ruleHead.metadata,
                 ...validatedData
             };
 
@@ -94,11 +95,6 @@ class RuleRepository {
                 this.RuleTransfomer.toPersistence(newRuleData),
                 { transaction }
             );
-
-            const ruleHead = await this.RuleHeadModel.findOne({
-                where: { name: existingRule.name },
-                transaction
-            });
 
             await ruleHead.update({
                 currentRuleId: newRule.id
